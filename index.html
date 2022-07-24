@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <input class="input-field" id="search" type="text" placeholder="wyszukaj" onInput="dynamicSearchSort(search.value)">
+        <fieldset>      
+            <legend>Data</legend>      
+            <input class="input-field" id="newest" type="radio" name="date" value="najnowsze>najnowsze<br>      
+            <input class="input-field" id="oldest" type="radio" name="date" value="najstarsze">najstarsze<br>                  
+        </fieldset> 
+        <fieldset>      
+            <legend>Województwo</legend>      
+            <input class="input-field" id="dolnoslaskie" type="checkbox" name="state" value="dolnoslaskie">dolnosloadkie<br>      
+            <input class="input-field" id="slaskie" type="checkbox" name="state" value="sloskie">slaskie<br>                  
+            <input class="input-field" id="lubelskie"  type="checkbox" name="state" value="lubelskie">lubelskie<br>      
+            <input class="input-field" id="pomorskie" type="checkbox" name="state" value="pomorskie">pomorskie<br>                  
+        </fieldset> 
+        <fieldset>      
+            <legend>umowa</legend>      
+            <input class="input-field" id="uop" type="checkbox" name="agremeent-type" value="uop">UoP<br>      
+            <input class="input-field" id="b2b" type="checkbox" name="agremeent-type" value="b2b">B2B<br>                  
+        </fieldset> 
+        <fieldset>      
+            <legend>Zadania</legend>      
+            <input class="input-field" id="development" type="checkbox" name="tasks" value="development">Development<br>      
+            <input class="input-field" id="support" type="checkbox" name="tasks" value="support">support<br>                  
+            <input class="input-field" id="helpdesk" type="checkbox" name="tasks" value="helpdesk">helpdesk"<br>      
+            <input class="input-field" id="ceo" type="checkbox" name="tasks" value="ceo">ceo<br>                  
+        </fieldset> 
+    </div>
+    <div id="offerts-container"></div>
+    <script>
+        const parentContainerForData =  document.getElementById("offerts-container")
+        const tableOfData = [
+            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('B2B', 'uop')},
+            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'B2B'},
+            {name: 'budowlaniec', tasks: ( 'ceo', 'helpdesk'), state: "pomorskie", date: '2021-09-18', agreement: 'uop'},
+            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'B2B'},
+            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('B2B', 'uop')},
+            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'B2B'},
+            {name: 'budowlaniec', tasks: ( 'ceo', 'helpdesk'), state: "pomorskie", date: '2021-09-18', agreement: 'uop'},
+            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'B2B'},
+            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('B2B', 'uop')},
+            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'B2B'},
+            {name: 'budowlaniec', tasks: ( 'ceo', 'helpdesk'), state: "pomorskie", date: '2021-09-18', agreement: 'uop'},
+            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'B2B'}
+        ]
+        tableOfData.forEach((elem) => {
+            const div = document.createElement('div');
+            div.textContent = elem.name;
+            parentContainerForData.appendChild(div)
+        })
+
+        const generatedInputsArr = [];
+        const inputsArr = [...document.querySelectorAll('.input-field')].forEach( (input) =>{
+            const elemID = input.id
+            const inputElem = document.getElementById(`${elemID}`)
+            eval(`"const ${elemID} + 'inp' = ${inputElem}"`)
+            generatedInputsArr.push(`${elemID}`)
+        })
+
+        
+        function dynamicSearchSort(query){
+            parentContainerForData.textContent = '';
+            tableOfData.forEach((elem) => {
+                if(elem.name.includes(`${query}`)){
+                    const div = document.createElement('div');
+                    div.textContent = elem.name;
+                    parentContainerForData.appendChild(div)
+                }
+            })
+        }
+    </script>
+</body>
+</html>
