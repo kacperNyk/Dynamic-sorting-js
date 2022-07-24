@@ -11,7 +11,7 @@
         <input class="input-field" id="search" type="text" placeholder="wyszukaj" onInput="dynamicSearchSort(search.value)">
         <fieldset>      
             <legend>Data</legend>      
-            <input class="input-field" id="newest" type="radio" name="date" value="najnowsze>najnowsze<br>      
+            <input class="input-field" id="newest" type="radio" name="date" value="najnowsze">najnowsze<br>      
             <input class="input-field" id="oldest" type="radio" name="date" value="najstarsze">najstarsze<br>                  
         </fieldset> 
         <fieldset>      
@@ -24,13 +24,13 @@
         <fieldset>      
             <legend>umowa</legend>      
             <input class="input-field" id="uop" type="checkbox" name="agremeent-type" value="uop">UoP<br>      
-            <input class="input-field" id="b2b" type="checkbox" name="agremeent-type" value="b2b">B2B<br>                  
+            <input class="input-field" id="b2b" type="checkbox" name="agremeent-type" value="b2b">b2b<br>                  
         </fieldset> 
         <fieldset>      
             <legend>Zadania</legend>      
             <input class="input-field" id="development" type="checkbox" name="tasks" value="development">Development<br>      
             <input class="input-field" id="support" type="checkbox" name="tasks" value="support">support<br>                  
-            <input class="input-field" id="helpdesk" type="checkbox" name="tasks" value="helpdesk">helpdesk"<br>      
+            <input class="input-field" id="helpdesk" type="checkbox" name="tasks" value="helpdesk">helpdesk<br>      
             <input class="input-field" id="ceo" type="checkbox" name="tasks" value="ceo">ceo<br>                  
         </fieldset> 
     </div>
@@ -38,33 +38,54 @@
     <script>
         const parentContainerForData =  document.getElementById("offerts-container")
         const tableOfData = [
-            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('B2B', 'uop')},
-            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'B2B'},
+            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('b2b', 'uop')},
+            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'b2b'},
             {name: 'budowlaniec', tasks: ( 'ceo', 'helpdesk'), state: "pomorskie", date: '2021-09-18', agreement: 'uop'},
-            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'B2B'},
-            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('B2B', 'uop')},
-            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'B2B'},
+            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'b2b'},
+            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('b2b', 'uop')},
+            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'b2b'},
             {name: 'budowlaniec', tasks: ( 'ceo', 'helpdesk'), state: "pomorskie", date: '2021-09-18', agreement: 'uop'},
-            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'B2B'},
-            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('B2B', 'uop')},
-            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'B2B'},
+            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'b2b'},
+            {name: 'inzynier', tasks: ('development', 'support'), state: 'dolnoslaskie', date: '2021-09-12', agreement: ('b2b', 'uop')},
+            {name: 'mechanik', tasks: ('development', 'ceo', 'helpdesk'),  state: 'sloskie', date: '2021-09-22', agreement: 'b2b'},
             {name: 'budowlaniec', tasks: ( 'ceo', 'helpdesk'), state: "pomorskie", date: '2021-09-18', agreement: 'uop'},
-            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'B2B'}
+            {name: 'spawacz', tasks: ('helpdesk'), state: "lubelskie", date: '2021-09-25', agreement: 'b2b'}
         ]
-        tableOfData.forEach((elem) => {
+        tableOfData.map((elem) => {
             const div = document.createElement('div');
             div.textContent = elem.name;
             parentContainerForData.appendChild(div)
         })
-
-        const generatedInputsArr = [];
-        const inputsArr = [...document.querySelectorAll('.input-field')].forEach( (input) =>{
+        const checkedInputsArr = [];
+        const inputsArr = [...document.querySelectorAll('.input-field')].map( (input) =>{
             const elemID = input.id
             const inputElem = document.getElementById(`${elemID}`)
-            eval(`"const ${elemID} + 'inp' = ${inputElem}"`)
-            generatedInputsArr.push(`${elemID}`)
+            inputElem.addEventListener("click", () => {
+                if(inputElem.checked){
+                    checkedInputsArr.push(inputElem)
+                } else {
+                    checkedInputsArr.pop(inputElem)
+                }
+                sortByCheckedCheckboxes(checkedInputsArr)
+            })
         })
-
+        
+        function sortByCheckedCheckboxes(...args){
+            // każdy objekt z listy tableofdata
+            tableOfData.forEach((elem) => {
+                // pobieram kazdy klucz z elementu i robie foreach
+                Object.keys(elem).forEach((key) => {
+                    args.forEach((arg) => {arg.forEach((elem) => {
+                        const argInputValue = elem.value
+                        // if(elem[key].includes(`${argInputValue}`)){
+                        //     const div = document.createElement('div');
+                        //     div.textContent = elem.name;
+                        //     parentContainerForData.appendChild(div)
+                        // }
+                    })})
+                })
+            })
+        }
         
         function dynamicSearchSort(query){
             parentContainerForData.textContent = '';
